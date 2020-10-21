@@ -14,7 +14,7 @@ os.chdir(os.path.dirname(sys.argv[0]))
 mcbark = 0
 mcwood = 0
 rx = "test"
-tar = "101c.txt"
+tar = "MerchTrees.txt"
 
 # ----- END OF USER CONTROLS -----
 
@@ -334,6 +334,7 @@ slist = [0, s1, s2, s3, s4, s5, s6, s7]
 llist = [8,12,16,20]
 
 fhandle = io.open("scribtable.txt", "r")
+next(fhandle)   #skip first line with headers
 for line in fhandle:
     tlist = line.strip().split("\t")
     k = int(tlist[0])
@@ -405,6 +406,7 @@ fhandle.close()
 
 gwp = dict()
 fhandle = io.open("gwtparms.txt", "r")
+next(fhandle)   #skip first line with headers
 for line in fhandle:
     tlist = line.strip().split("\t")
     a = int(tlist[0])
@@ -423,6 +425,18 @@ t_lab = "priced_t.txt"
 s_lab = "priced_s.txt"
 
 fhandle = open(t_lab,"w")
+# Print headers before printing trees
+t_headers = ["SPCD", "DBH", "HEIGHT", "TRUN_HT", "PCT_CR", "MDEFECT", "TPA", "MERCH_VOL", "STAND_ID", "TESC", \
+             "TREE_ID", "HCB", "YEAR_CUT", "RX", "T_PRICE", "S_PULP_CF", "LOG_PULP_CF", "SAW_VOL_CF", "LOG_PULP_GT", \
+             "SAW_WT_GT"]
+t = 0
+delimiter = "\t"
+for h in t_headers:
+    fhandle.write(h)
+    t = t + 1
+    if t < len(t_headers):
+        fhandle.write(delimiter)
+fhandle.write("\n")
 count = 0
 for stand in trx:
     for tree in trx[stand]:
