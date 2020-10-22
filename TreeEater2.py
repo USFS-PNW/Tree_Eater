@@ -372,7 +372,13 @@ c6 = {8:377.50, 14:391.25, 22:410.00, 24:416.25}
 clist = [0, c1, c2, c3, c4, c5, c6]
 
 # eqict takes FIA species codes and returns the tree eater species code
-eqdict = {11:6, 15:6, 17:6, 19:6, 20:6, 21:6, 81:2, 108:5, 116:3, 117:4, 122:3, 202:1}
+eqdict = {}
+fhandle = io.open("SpeciesGroups.txt", "r")
+next(fhandle)   #skip first line with headers
+for line in fhandle:
+    (key, val) = line.split()
+    eqdict[int(key)] = int(val)
+fhandle.close()
 
 # dib lists contain the parameters neccessary for dib calculations
 # See preptable.xlsx for list of indexes
