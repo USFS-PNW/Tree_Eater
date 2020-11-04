@@ -5,7 +5,7 @@ import numpy
 import os
 import sys
 from numbers import Number
-os.chdir(os.path.dirname(sys.argv[0]))
+os.chdir(os.path.abspath(os.path.dirname(sys.argv[0])))
 
 # ----- USER CONTROLS -----
 # mcbark and mcwood set the assumed moisture content for bark and wood respectively.
