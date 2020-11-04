@@ -394,10 +394,11 @@ dib6 = list()
 mdib = [0, dib1, dib2, dib3, dib4, dib5, dib6]
 
 fhandle = io.open("dibparms.txt", "r")
+next(fhandle)   #skip first line with headers
 parc = 1
 for line in fhandle:
     tlist = line.strip().split("\t")
-    mdib[parc].append(float(tlist[0]))
+    #skip first position [0] for row headers
     mdib[parc].append(float(tlist[1]))
     mdib[parc].append(float(tlist[2]))
     mdib[parc].append(float(tlist[3]))
@@ -405,6 +406,7 @@ for line in fhandle:
     mdib[parc].append(float(tlist[5]))
     mdib[parc].append(float(tlist[6]))
     mdib[parc].append(float(tlist[7]))
+    mdib[parc].append(float(tlist[8]))
     parc = parc + 1
 fhandle.close()
 
@@ -432,7 +434,7 @@ s_lab = "priced_s.txt"
 
 fhandle = open(t_lab,"w")
 # Print headers before printing trees
-t_headers = ["SPCD", "DBH", "HEIGHT", "TRUN_HT", "PCT_CR", "MDEFECT", "TPA", "MERCH_VOL", "STAND_ID", "TESC", \
+t_headers = ["SPCD", "DBH", "HEIGHT", "TRUN_HT", "CR_PROP", "MDEFECT", "TPA", "MERCH_VOL", "STAND_ID", "TESC", \
              "TREE_ID", "HCB", "YEAR_CUT", "RX", "T_PRICE", "S_PULP_CF", "LOG_PULP_CF", "SAW_VOL_CF", "LOG_PULP_GT", \
              "SAW_WT_GT"]
 t = 0
