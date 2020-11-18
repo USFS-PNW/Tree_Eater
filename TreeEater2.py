@@ -362,14 +362,19 @@ fhandle.close()
 # PICO = 5
 # TFIR = 6
 
-c1 = {8:481.25, 14:513.75, 22:526.25, 24:532.50}
-c2 = {8:635.00, 14:635.00, 22:635.00, 24:635.00}
-c3 = {8:282.50, 14:316.25, 22:345.00, 24:377.50}
-c4 = {8:275.00, 14:295.00, 22:330.00, 24:345.00}
-c5 = {8:342.50, 14:342.50, 22:342.50, 24:342.50}
-c6 = {8:377.50, 14:391.25, 22:410.00, 24:416.25}
-
-clist = [0, c1, c2, c3, c4, c5, c6]
+clist = [0]
+keys = [8,14,22,24]     # Our 4 dclasses
+fhandle = io.open("mbfparms.txt", "r")
+next(fhandle)   #skip first line with headers
+for line in fhandle:
+    idx = 2     #skip first two columns with row titles
+    tlist = line.strip().split("\t")
+    thisdict = {}
+    for key in keys:
+        thisdict[key] = float(tlist[idx])
+        idx = idx + 1
+    clist.append(thisdict)
+fhandle.close()
 
 # eqict takes FIA species codes and returns the tree eater species code
 eqdict = {}
@@ -426,6 +431,9 @@ for line in fhandle:
     gwp[a] = [b, c, d, e, f]
 fhandle.close()
 
+#Attribution to print to standard out
+print("Tree Eater is one module in Neoprocessor, a set of Python scripts created and maintained by Joshua Petitmermet (joshuapetitmermet@gmail.com)")
+
 cut = incut(rx,mcbark,mcwood,tar,eqdict,gwp,mdib,clist,slist,llist)
 trx = cut[0]
 orx = cut[1]
@@ -449,17 +457,16 @@ count = 0
 for stand in trx:
     for tree in trx[stand]:
         aTree = trx[stand][tree]
+        # Format a string (line) for each tree so that columns line up in the .txt output
         aLine = "{0:4}\t{1:4}\t{2:4}\t{3:4}\t".format(aTree[0], aTree[1], round(aTree[2]), round(aTree[3]))
         aLine = aLine + "{0:5.2f}\t{1:5.1f}\t{2:4.2f}\t".format(aTree[4],aTree[5],aTree[6])
         aLine = aLine + "{0:7.2f}\t   {1:16}\t{2:2}\t".format(aTree[7],aTree[8], aTree[9])
-        # Format some fields before printing them out
-        trx[stand][tree][11] = round(trx[stand][tree][11], 1)  # HCB
-        trx[stand][tree][14] = round(trx[stand][tree][14], 2)  # T_PRICE
-        trx[stand][tree][15] = round(trx[stand][tree][15], 2)  # S_PULP_CF
-        trx[stand][tree][16] = round(trx[stand][tree][16], 2)  # LOG_PULP_CF
+        aLine = aLine + " {0:4}\t{1:4.1f}\t {2:2}\t".format(aTree[10], aTree[11], aTree[12])
+        aLine = aLine + "       {0:4}\t{1:6.2f}\t{2:6.2f}\t".format(aTree[13], aTree[14], aTree[15])
+        aLine = aLine + "         {0:7.2f}\t{1:7.2f}\t         {2:6.3f}\t".format(aTree[16], aTree[17], aTree[18])
+        aLine = aLine + "       {0:7.3f}\t".format(aTree[17])
         fhandle.write(aLine)
         fhandle.write("\n")
-        # printout(aTree,fhandle,"\t")
         count = count + 1
 fhandle.close()
 print(str(count) + " tree records written to " + t_lab)
