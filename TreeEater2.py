@@ -434,8 +434,8 @@ s_lab = "priced_s.txt"
 
 fhandle = open(t_lab,"w")
 # Print headers before printing trees
-t_headers = ["SPCD", "DBH", "HEIGHT", "TRUN_HT", "CR_PROP", "MDEFECT", "TPA", "MERCH_VOL", "STAND_ID", "TESC", \
-             "TREE_ID", "HCB", "YEAR_CUT", "RX", "T_PRICE", "S_PULP_CF", "LOG_PULP_CF", "SAW_VOL_CF", "LOG_PULP_GT", \
+t_headers = ["SPCD", "DBH", "HEIGHT", "TRUN_HT", "CR_PROP", "MDEFECT", "TPA", "MERCH_VOL", "STAND_ID          ", "TESC", \
+             "TREE_ID     ", "HCB", "YEAR_CUT", "RX", "T_PRICE", "S_PULP_CF", "LOG_PULP_CF", "SAW_VOL_CF", "LOG_PULP_GT", \
              "SAW_WT_GT"]
 t = 0
 delimiter = "\t"
@@ -448,7 +448,18 @@ fhandle.write("\n")
 count = 0
 for stand in trx:
     for tree in trx[stand]:
-        printout(trx[stand][tree],fhandle,"\t")
+        aTree = trx[stand][tree]
+        aLine = "{0:4}\t{1:4}\t{2:4}\t{3:4}\t".format(aTree[0], aTree[1], round(aTree[2]), round(aTree[3]))
+        aLine = aLine + "{0:5.2f}\t{1:5.1f}\t{2:4.2f}\t".format(aTree[4],aTree[5],aTree[6])
+        aLine = aLine + "{0:7.2f}\t   {1:16}\t{2:2}\t".format(aTree[7],aTree[8], aTree[9])
+        # Format some fields before printing them out
+        trx[stand][tree][11] = round(trx[stand][tree][11], 1)  # HCB
+        trx[stand][tree][14] = round(trx[stand][tree][14], 2)  # T_PRICE
+        trx[stand][tree][15] = round(trx[stand][tree][15], 2)  # S_PULP_CF
+        trx[stand][tree][16] = round(trx[stand][tree][16], 2)  # LOG_PULP_CF
+        fhandle.write(aLine)
+        fhandle.write("\n")
+        # printout(aTree,fhandle,"\t")
         count = count + 1
 fhandle.close()
 print(str(count) + " tree records written to " + t_lab)
